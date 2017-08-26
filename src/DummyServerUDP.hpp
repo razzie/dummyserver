@@ -16,88 +16,40 @@ IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE
 */
 
+#pragma once
+
 #include <cstdint>
+#include <cstring>
 #include <iostream>
-#include <string>
+#include <map>
+#include <stdexcept>
+#include <raz/networkbackend.hpp>
 #include "Settings.hpp"
-#include "DummyServerTCP.hpp"
-#include "DummyServerUDP.hpp"
 
-enum class ServerType
+class DummyServerUDP
 {
-	TCP,
-	UDP
+public:
+	static void run(uint16_t port, bool ipv6 = false);
+
+private:
+	typedef raz::NetworkServerBackendUDP<MAX_PACKET_SIZE>::Client Client;
+	typedef raz::NetworkServerBackendUDP<MAX_PACKET_SIZE>::ClientState ClientState;
+
+	struct ClientComparator
+	{
+		bool operator()(const Client& a, const Client& b) const
+		{
+			return (std::memcmp(&a, &b, sizeof(Client)) < 0);
+		}
+	};
+
+	DummyServerUDP(uint16_t port, bool ipv6);
+	void run();
+	void handlePacket(const char* packet, size_t len, Client& sender);
+	void detectNewClient(const Client& client);
+	void handleClientDisconnect(const Client& client);
+
+	raz::NetworkServerBackendUDP<MAX_PACKET_SIZE> m_server_obj;
+	unsigned m_client_counter;
+	std::map<Client, unsigned, ClientComparator> m_client_map;
 };
-
-int main()
-{
-	ServerType server_type;
-	uint16_t port;
-	bool ipv6 = false;
-
-	for (;;)
-	{
-		std::string input;
-
-		std::cout << "Server type (tcp / udp): " << std::flush;
-		std::cin >> input;
-
-		if (input.compare("tcp") == 0)
-		{
-			server_type = ServerType::TCP;
-			break;
-		}
-		else if (input.compare("udp") == 0)
-		{
-			server_type = ServerType::UDP;
-			break;
-		}
-		else
-		{
-			continue;
-		}
-	}
-
-	if (ASK_SERVER_IP_PROTOCOL)
-	{
-		for (;;)
-		{
-			std::string input;
-
-			std::cout << "Server protocol (ipv4 / ipv6): " << std::flush;
-			std::cin >> input;
-
-			if (input.compare("ipv4") == 0)
-			{
-				ipv6 = false;
-				break;
-			}
-			else if (input.compare("ipv6") == 0)
-			{
-				ipv6 = true;
-				break;
-			}
-			else
-			{
-				continue;
-			}
-		}
-	}
-
-	std::cout << "Port: " << std::flush;
-	std::cin >> port;
-
-	try
-	{
-		if (server_type == ServerType::TCP)
-			DummyServerTCP::run(port, ipv6);
-		else
-			DummyServerUDP::run(port, ipv6);
-	}
-	catch (std::exception& e)
-	{
-		std::cerr << e.what() << std::endl;
-	}
-
-	return 0;
-}

@@ -129,7 +129,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\DummyServer.hpp" />
+    <ClInclude Include="src\DummyServerTCP.hpp" />
+    <ClInclude Include="src\DummyServerUDP.hpp" />
     <ClInclude Include="src\raz\memory.hpp" />
     <ClInclude Include="src\raz\network.hpp" />
     <ClInclude Include="src\raz\networkbackend.hpp" />
@@ -137,6 +138,8 @@
     <ClInclude Include="src\Settings.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\DummyServerTCP.cpp" />
+    <ClCompile Include="src\DummyServerUDP.cpp" />
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
