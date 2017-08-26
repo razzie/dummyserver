@@ -131,10 +131,7 @@
   <ItemGroup>
     <ClInclude Include="src\DummyServerTCP.hpp" />
     <ClInclude Include="src\DummyServerUDP.hpp" />
-    <ClInclude Include="src\raz\memory.hpp" />
-    <ClInclude Include="src\raz\network.hpp" />
     <ClInclude Include="src\raz\networkbackend.hpp" />
-    <ClInclude Include="src\raz\serialization.hpp" />
     <ClInclude Include="src\Settings.hpp" />
   </ItemGroup>
   <ItemGroup>
