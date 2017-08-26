@@ -30,12 +30,21 @@
     <ClInclude Include="src\Settings.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\DummyServer.hpp">
+    <ClInclude Include="src\DummyServerTCP.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\DummyServerUDP.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DummyServerTCP.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DummyServerUDP.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
