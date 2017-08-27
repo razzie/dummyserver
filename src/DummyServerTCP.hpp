@@ -42,8 +42,8 @@ private:
 
 	DummyServerTCP(uint16_t port, bool ipv6);
 	void run();
-	void handleClientConnected(const Client& client);
-	void handleClientDisconnected(const Client& client);
+	void handleClientConnect(const Client& client);
+	void handleClientDisconnect(const Client& client);
 	void handlePacket(const char* packet, size_t len, Client& sender);
 
 	raz::NetworkServerBackendTCP m_server_obj;

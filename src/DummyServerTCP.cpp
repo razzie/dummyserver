@@ -46,11 +46,11 @@ void DummyServerTCP::run()
 		switch (state)
 		{
 		case ClientState::CLIENT_CONNECTED:
-			handleClientConnected(client);
+			handleClientConnect(client);
 			break;
 
 		case ClientState::CLIENT_DISCONNECTED:
-			handleClientDisconnected(client);
+			handleClientDisconnect(client);
 			break;
 
 		case ClientState::PACKET_RECEIVED:
@@ -66,13 +66,13 @@ void DummyServerTCP::run()
 	}
 }
 
-void DummyServerTCP::handleClientConnected(const Client& client)
+void DummyServerTCP::handleClientConnect(const Client& client)
 {
 	m_client_map[client] = ++m_client_counter;
 	std::cout << "#" << m_client_counter << " connected" << std::endl;
 }
 
-void DummyServerTCP::handleClientDisconnected(const Client& client)
+void DummyServerTCP::handleClientDisconnect(const Client& client)
 {
 	auto it = m_client_map.find(client);
 	if (it != m_client_map.end())
