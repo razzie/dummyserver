@@ -41,8 +41,13 @@ void DummyServerUDP::run()
 	{
 		size_t len = m_server_obj.wait(client, state, 1000);
 
-		if (state == ClientState::PACKET_RECEIVED)
+		switch (state)
 		{
+		case ClientState::CLIENT_UNAVAILABLE:
+			handleClientDisconnect(client);
+			break;
+
+		case ClientState::PACKET_RECEIVED:
 			if (len > MAX_PACKET_SIZE)
 			{
 				std::cout << "too large packet, trimming size to " << MAX_PACKET_SIZE << " bytes" << std::endl;
@@ -52,14 +57,15 @@ void DummyServerUDP::run()
 			handlePacket(packet, len, client);
 			break;
 		}
+
 	}
 }
 
 void DummyServerUDP::handlePacket(const char* packet, size_t len, Client& sender)
 {
-	std::cout << "#" << m_client_map[sender] << " packet: " << len << " bytes" << std::flush;
-
 	detectNewClient(sender);
+
+	std::cout << "#" << m_client_map[sender] << " packet: " << len << " bytes" << std::flush;
 
 	if (m_client_map.size() > 1)
 		std::cout << " - sending to:";
@@ -100,7 +106,7 @@ void DummyServerUDP::handleClientDisconnect(const Client& client)
 	auto it = m_client_map.find(client);
 	if (it != m_client_map.end())
 	{
-		std::cout << "#" << it->second << " not availably anymore (disconnected)" << std::endl;
+		std::cout << "#" << it->second << " not available anymore (disconnected)" << std::endl;
 		m_client_map.erase(it);
 	}
 }
